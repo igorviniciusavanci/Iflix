@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native';
-import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
+import api from '../../services/api';
 
 import {
   Container,
@@ -16,15 +16,18 @@ import {
 } from './styles';
 
 export default function Details() {
-  const navigation = useNavigation();
   const route = useRoute();
   const [movie, setmovie] = useState([]);
 
   useEffect(() => {
     async function getFilms() {
-      const response = await axios.get(
-        `http://www.omdbapi.com/?apikey=8e880851&i=${route.params.imdbID}`
-      );
+      const response = await api.get('/', {
+        params: {
+          type: 'movie',
+          i: route.params.imdbID,
+          apikey: '8e880851',
+        },
+      });
       setmovie(response.data);
     }
     getFilms();
